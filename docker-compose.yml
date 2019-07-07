@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  mongobooksapi:
+    image: ${DOCKER_REGISTRY-}mongobooksapi
+    build:
+      context: .
+      dockerfile: MongoBooksApi/Dockerfile
+    environment:
+      MongoDB__Host: mongo
+    depends_on:
+      - mongo
+
+  mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongo
+    environment:
+      MONGO_INITDB_DATABASE: BookstoreDb
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
